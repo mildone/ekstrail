@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-example
+  namespace: webserver
+  labels:
+    app: eks-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eks-example
+  template:
+    metadata:
+      labels:
+        app: eks-example
+    spec:
+      containers:
+      - name: eks-example
+        image: 460592757249.dkr.ecr.cn-north-1.amazonaws.com.cn/eks-example:latest # {"\$imagepolicy": "eks-example-img-update:eks-example-image-pol"}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
